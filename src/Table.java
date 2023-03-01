@@ -17,8 +17,10 @@ public class Table extends BufferedScreen {
         pen.moveTo(100, 100);
         pen.setThickness(3);
         playerBall = new Ball(this, width / 2, height / 2 + height / 4, Color.BLACK, true);
+        playerBall.mass = 5f;
         balls.add(playerBall);
         balls.add(new Ball(this, width / 2, height / 2, Color.BLUE, false));
+        balls.add(new Ball(this, width / 2, height / 2 - height / 4, Color.BLUE, false));
 
         holes.add(new Hole(this, 100 + Hole.SIZE, 100 + Hole.SIZE));
         holes.add(new Hole(this, 100 + Hole.SIZE, getHeight() / 2f));
@@ -38,7 +40,7 @@ public class Table extends BufferedScreen {
     public void update() {
         pen.drawRectangle(getWidth() - 200, getHeight() - 200, (float) Math.sqrt(getWidth() * getHeight()) / 30f);
         for (Ball ball : balls) {
-            ball.move();
+            ball.update();
         }
         for (Hole hole : holes) {
             hole.update();
@@ -65,5 +67,12 @@ public class Table extends BufferedScreen {
     public void editMouseMoved(MouseEvent e) {
         this.cMouseXPos = e.getX();
         this.cMouseYPos = e.getY();
+    }
+
+    @Override
+    public void editMouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {
+            resetPlayerBall();
+        }
     }
 }

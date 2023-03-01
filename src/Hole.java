@@ -27,7 +27,7 @@ public class Hole {
             float disX = x - ball.pen.getXPos();
             float disY = y - ball.pen.getYPos();
             float distance = (float) Math.sqrt((disX * disX) + (disY * disY));
-            if (!(distance <= SIZE + Ball.SIZE)) {
+            if (!(distance <= SIZE + ball.size)) {
                 return;
             }
             if (ball == table.getPlayerBall()) {

@@ -1,12 +1,14 @@
 import java.awt.*;
 
 public class Ball {
-    public final static float SIZE = 10f;
+
     public final static float FRICTION = 0.995f;
-    public final static float SPEED = 0.01f;
+    public final static float SPEED = 0.005f;
     public final Pen pen;
     public final Table table;
     public float vX = 0f, vY = 0f;
+    public float size = 10f;
+    public float mass = 1f;
 
     public Ball(Table table, int x, int y, Color color, boolean playerBall) {
         pen = new Pen(table);
@@ -18,24 +20,25 @@ public class Ball {
     }
 
     public void draw() {
-        pen.drawCircle(SIZE);
+        pen.drawCircle(size);
     }
 
     public void delete() {
         Color temp = pen.getColor();
         pen.setColorBackground();
-        pen.drawCircle(SIZE);
+        pen.drawCircle(size);
         pen.setColor(temp);
     }
 
-    public void move() {
+    public void update() {
         testEdge();
-        testBalls();
         delete();
         pen.moveTo(pen.getXPos() + vX, pen.getYPos() + vY);
+        testBalls();
         vX *= FRICTION;
         vY *= FRICTION;
         draw();
+
     }
 
     public void addVelocity(float x, float y) {
@@ -52,10 +55,10 @@ public class Ball {
     }
 
     private void testEdge() {
-        if (pen.getXPos() >= table.getWidth() - 100 - SIZE || pen.getXPos() <= 100 + SIZE) {
+        if (pen.getXPos() >= table.getWidth() - 100 - size || pen.getXPos() <= 100 + size) {
             vX = -vX;
         }
-        if (pen.getYPos() >= table.getHeight() - 100 - SIZE || pen.getYPos() <= 100 + SIZE) {
+        if (pen.getYPos() >= table.getHeight() - 100 - size || pen.getYPos() <= 100 + size) {
             vY = -vY;
         }
     }
@@ -69,11 +72,20 @@ public class Ball {
             float disX = pen.getXPos() - ball.pen.getXPos();
             float disY = pen.getYPos() - ball.pen.getYPos();
             float distance = (float) Math.sqrt((disX * disX) + (disY * disY));
-            if (distance <= SIZE + SIZE) {
-                vX = (vX + ball.vX) * FRICTION;
-                vY = (vY + ball.vY) * FRICTION;
-            }
+            if (distance <= this.size + ball.size) {
 
+                float tempBallVX = ball.vX;
+                float tempBallVY = ball.vY;
+                float tempVX = vX;
+                float tempVY = vY;
+
+                vX = 2 * ((mass * tempVX + ball.mass * tempBallVX) / (mass + ball.mass)) - tempVX;
+                vY = 2 * ((mass * tempVY + ball.mass * tempBallVY) / (mass + ball.mass)) - tempVY;
+
+
+                ball.vX = 2 * ((mass * tempVX + ball.mass * tempBallVX) / (mass + ball.mass)) - tempBallVX;
+                ball.vY = 2 * ((mass * tempVY + ball.mass * tempBallVY) / (mass + ball.mass)) - tempBallVY;
+            }
         }
     }
 }
