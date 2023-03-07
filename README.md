@@ -10,7 +10,7 @@ Billiard game in Java as a school task
 
 ## Screenshots
 
-![Screenshot_0](https://github.com/Adivius/Billard/blob/master/Screenshot1.png?raw=true)
+![Screenshot_0](https://github.com/Adivius/Billard/blob/master/Screenshot0.png?raw=true)
 ![Screenshot_1](https://github.com/Adivius/Billard/blob/master/Screenshot1.png?raw=true)
 
 ## License
