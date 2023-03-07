@@ -3,29 +3,36 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class Table extends BufferedScreen {
+public class Table extends EventScreen {
 
     public ArrayList<Ball> balls;
     public ArrayList<Hole> holes;
     public Ball playerBall;
+    public boolean finished = false;
     Pen pen = new Pen(this);
 
-    public Table(int width, int height, String title, int count) {
+    public Table(int width, int height, String title) {
         super(width, height, title);
         balls = new ArrayList<>();
         holes = new ArrayList<>();
         pen.moveTo(100, 100);
         pen.setThickness(3);
-        playerBall = new Ball(this, width / 2, height / 2 + height / 4, Color.BLACK, true);
-        playerBall.mass = 5f;
+        playerBall = new Ball(this, width / 2f, height / 2f + height / 4f, Color.BLACK, true);
+        playerBall.mass = 1.2f;
         balls.add(playerBall);
-        balls.add(new Ball(this, width / 2, height / 2, Color.BLUE, false));
-        balls.add(new Ball(this, width / 2, height / 2 - height / 4, Color.BLUE, false));
+
+        int radius = 12;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < i; j++) {
+                float pX = width / 2f + 10 + j * radius * 2.5f - i * radius * 1.25f;
+                float pY = height / 2f - i * radius * 2.5f;
+                balls.add(new Ball(this, pX, pY, Color.BLACK, false));
+            }
+        }
 
         holes.add(new Hole(this, 100 + Hole.SIZE, 100 + Hole.SIZE));
         holes.add(new Hole(this, 100 + Hole.SIZE, getHeight() / 2f));
         holes.add(new Hole(this, 100 + Hole.SIZE, getHeight() - 100 - Hole.SIZE));
-
         holes.add(new Hole(this, getWidth() - 100 - Hole.SIZE, 100 + Hole.SIZE));
         holes.add(new Hole(this, getWidth() - 100 - Hole.SIZE, getHeight() / 2f));
         holes.add(new Hole(this, getWidth() - 100 - Hole.SIZE, getHeight() - 100 - Hole.SIZE));
@@ -46,6 +53,16 @@ public class Table extends BufferedScreen {
             hole.update();
         }
         redraw();
+
+        if (balls.size() <= 1) {
+            finished = true;
+        }
+    }
+
+    public void exit() {
+        pen.moveTo(getWidth() / 2f, getHeight() / 2f);
+        pen.write("Finished");
+        redraw();
     }
 
     public void resetPlayerBall() {
@@ -58,8 +75,19 @@ public class Table extends BufferedScreen {
 
     @Override
     public void editKeyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            playerBall.addVelocityToMouse();
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_SPACE:
+                playerBall.addVelocityToMouse();
+                break;
+            case KeyEvent.VK_1:
+                playerBall.mass = 1f;
+                break;
+            case KeyEvent.VK_2:
+                playerBall.mass = 2f;
+                break;
+            case KeyEvent.VK_3:
+                playerBall.mass = 0.5f;
+                break;
         }
     }
 
