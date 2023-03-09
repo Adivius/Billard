@@ -16,5 +16,4 @@ It's a simple billiard game written in Java with my own graphics library for a s
 ![Screenshot_1](https://github.com/Adivius/Billard/blob/master/Screenshot1.png?raw=true)
 
 ## License
-
 [MIT](https://choosealicense.com/licenses/mit/)
